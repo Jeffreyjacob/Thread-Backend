@@ -23,7 +23,7 @@ const Passport = (app) => {
             {
                 clientID: process.env.INSTAGRAM_CLIENT_ID,
                 clientSecret: process.env.INSTAGRAM_SECRET_KEY,
-                callbackURL: "/auth/instagram/callback",
+                callbackURL: "https://thread-backend-0wpa.onrender.com/auth/instagram/callback",
 
             }, async (accessToken, refreshToken, profile, callback) => {
                 User.findOne({
