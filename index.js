@@ -6,6 +6,7 @@ import ConnectDB from "./config/db/connect.js";
 import authRoute from './routes/auth.js';
 import errorHandler from "./middleware/errorHandler.js";
 import Passport from "./utils/passport.js";
+import instagramAuth from './routes/instagramAuth.js'
 
 
 const app = express()
@@ -23,6 +24,7 @@ app.get("/health",async(req,res)=>{
     res.send({message:"health OK!"})
   });
 app.use("/api/auth",authRoute)
+app.use("/auth",instagramAuth)
 
 app.use(errorHandler)
 

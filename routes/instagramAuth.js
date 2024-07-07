@@ -17,5 +17,5 @@ router.route("/instagram/callback").get(passport.authenticate("instagram",{
 })
 
 //forward the request to google's authentication server
-router.route("/auth/instagram").get(passport.authenticate("instagram"))
+router.route("/instagram").get(passport.authenticate("instagram"))
 export default  router
