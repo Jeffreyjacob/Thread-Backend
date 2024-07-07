@@ -5,6 +5,8 @@ import passport from 'passport'
 const router = express.Router()
 
 // authenticate the user using google
+//forward the request to google's authentication server
+router.route("/instagram").get(passport.authenticate('instagram'))
 
 router.route("/instagram/callback").get(passport.authenticate("instagram",{
     failureRedirect:`${process.env.FRONTEND_URL}/login`
@@ -16,7 +18,6 @@ router.route("/instagram/callback").get(passport.authenticate("instagram",{
     res.redirect(process.env.FRONTEND_URL);
 })
 
-//forward the request to google's authentication server
-router.route("/instagram").get(passport.authenticate("instagram"))
+
 
 export default  router
