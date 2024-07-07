@@ -16,6 +16,10 @@ app.use(express.urlencoded({extended:true}))
 app.use(cors())
 app.use(cookieParser())
 
+
+app.get("/health",async(req,res)=>{
+    res.send({message:"health OK!"})
+  });
 app.use("/api/auth",authRoute)
 
 app.use(errorHandler)
