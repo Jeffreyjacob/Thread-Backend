@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import ConnectDB from "./config/db/connect.js";
 import authRoute from './routes/auth.js';
 import errorHandler from "./middleware/errorHandler.js";
+import Passport from "./utils/passport.js";
 
 
 const app = express()
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
 app.use(cookieParser())
+Passport(app)
 
 
 app.get("/health",async(req,res)=>{
