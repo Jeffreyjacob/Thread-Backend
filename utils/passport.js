@@ -23,12 +23,37 @@ const Passport = (app) => {
             {
                 clientID: process.env.INSTAGRAM_CLIENT_ID,
                 clientSecret: process.env.INSTAGRAM_SECRET_KEY,
-                callbackURL: "https://thread-backend-0wpa.onrender.com/auth/instagram/callback",
+                callbackURL: "/auth/instagram/callback",
 
-            }, async (accessToken, refreshToken, profile,done) => {
-                User.find({ instagramId: profile.id }, function (err, user) {
-                    return done(err, user);
-                  });
+            }, async (accessToken, refreshToken, profile, callback) => {
+                User.findOne({
+                    instagramId: profile.id
+                }, function (err, user) {
+                    if (err) return callback(err);
+                    if (user) {
+                        return callback(null, user); // Check if user already exists
+                    }
+                    const {
+                        id,
+                        full_name,
+                        username,
+                        profile_picture,
+                        bio,
+                    } = profile._json.data;
+                    const new_user = new User({
+                        instagramId:id,
+                        fullname:full_name,
+                        username,
+                        profileImg:profile_picture,
+                        bio
+                    });
+                    new_user.save(function (err, user) {
+                        if (err) {
+                            throw err;
+                        }
+                        return callback(null, user);
+                    });
+                });
             }
         )
     )
