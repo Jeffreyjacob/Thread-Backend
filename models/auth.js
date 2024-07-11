@@ -4,11 +4,6 @@ import jwt from 'jsonwebtoken';
 
 
 const userSchema = new mongoose.Schema({
-    instagramId:{
-        type:String,
-        unique:true,
-        sparse:true
-    },
     username: {
         type: String,
         unique: true,
@@ -22,9 +17,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         select: false,
         minlength:6,
-        required:function(){
-            return !this.instagramId;
-        }
     },
     following: [
         {

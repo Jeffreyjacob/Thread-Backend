@@ -49,3 +49,16 @@ export const SignUpHandler = async(req,res,next)=>{
      next(error)
     }
 }
+
+export const LogoutHandler = async(req,res,next)=>{
+    try{
+       res.cookie("token","",{maxAge:0})
+       res.status(200).json({
+        success:true,
+        message:"Logout Successfull!"
+       })
+    }catch(error){
+     console.log(error)
+     next(error)
+    }
+}
