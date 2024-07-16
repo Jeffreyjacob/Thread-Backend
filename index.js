@@ -26,7 +26,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors({
-  origin:["*"],
+  origin:["http://localhost:5173","https://thread-frontend-git-main-jeffreys-projects-13ebf7f6.vercel.app","https://thread-frontend.onrender.com"],
   credentials:true
 }))
 app.use(cookieParser())
