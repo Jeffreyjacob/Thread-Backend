@@ -3,6 +3,7 @@ import User from "../models/auth.js"
 import ErrorResponse from "../utils/errorResponse.js";
 import {v2 as cloudinary} from 'cloudinary'
 import Post from "../models/post.js";
+import Notification from "../models/notification.js";
 
 const CreatPostShema = z.object({
     text:z.string().min(1,"Please ener a post content")
@@ -35,7 +36,6 @@ export const CreatePostHandler = async (req,res,next)=>{
          Img:newImage
        })
        await newPost.save()
-       newPost.populate({path:"user"})
        res.status(201).json(newPost)
     }catch(error){
         console.log(error)
@@ -47,7 +47,7 @@ export const GetAllPostHandler = async (req,res,next)=>{
     try{
        const post = await Post.find().sort({createdAt:-1}).populate({path:"user"}).populate({path:"comments.user"})
        if(post.length === 0){
-        res.status(200).json([])
+        return res.status(200).json([])
        }
        res.status(200).json(post)
     }catch(error){
@@ -77,8 +77,8 @@ export const EditPostHandler = async (req,res,next)=>{
          const uploadImage = await cloudinary.uploader.upload(dataURI)
          newImage = uploadImage.url
        }
-       post.Text = text;
-       post.Img = newImage;
+       post.Text = text || post.Text ;
+       post.Img = newImage || post.Img;
        await post.save()
        res.status(200).json({
         success:true,
@@ -159,9 +159,13 @@ export const LikeUnlikePostHandler = async(req,res,next)=>{
             post.Like.push(userId)
             await User.updateOne({_id:userId},{$push:{LikedPosts:postId}})
             await post.save()
-            
-            
-
+            //Notification
+            const newNotification = new Notification({
+                type:"Like",
+                from:userId,
+                to:post.user._id
+            })
+            await newNotification.save()
             const updatedLikes = post.Like
             res.status(200).json(updatedLikes)
         }
@@ -230,5 +234,23 @@ export const DeleteCommentOnPostHandler = async (req,res,next)=>{
     }catch(error){
       console.log(error)
       next(error)
+    }
+}
+
+export const GetPostByUserHandler = async(req,res,next)=>{
+    try{
+      const {username} = req.params
+      const user = await User.findOne({username:username})
+      if(!user){
+        throw new ErrorResponse("User not found",404)
+      }
+      const post = await Post.find({user:user._id}).populate({path:"user"})
+      if(post.length === 0){
+        return res.status(200).json([])
+      }
+      res.status(200).json(post)
+    }catch(error){
+       console.log(error)
+       next(error)
     }
 }

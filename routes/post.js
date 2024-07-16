@@ -2,7 +2,7 @@ import express from 'express';
 import { VerifyToken } from '../middleware/auth.js';
 import {  CommentOnPostHandler, CreatePostHandler, DeleteCommentOnPostHandler, 
     DeletePostHandler, EditPostHandler, GetAllPostHandler, GetFollowingPost,
-     GetPostByIdHandler, LikeUnlikePostHandler } from '../controller/post.js';
+     GetPostByIdHandler, GetPostByUserHandler, LikeUnlikePostHandler } from '../controller/post.js';
 import { Upload } from '../utils/Multer.js';
 
 
@@ -18,6 +18,7 @@ router.route("/comment/:id").post(VerifyToken,CommentOnPostHandler)
 router.route("/deleteComment/:id").post(VerifyToken,DeleteCommentOnPostHandler)
 router.route("/deletePost/:id").delete(VerifyToken,DeletePostHandler)
 router.route("/editPost/:id").put(Upload.single("img"),VerifyToken,EditPostHandler)
+router.route("/getProfilePost/:username").get(VerifyToken,GetPostByUserHandler)
 
 
 export default router;

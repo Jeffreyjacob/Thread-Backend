@@ -10,6 +10,7 @@ import userRoute from './routes/user.js';
 import instagramAuth from './routes/instagramAuth.js';
 import postRoute from './routes/post.js';
 import {v2 as cloudinary} from 'cloudinary';
+import notificationRoute from "./routes/notification.js"
 
 
 cloudinary.config({
@@ -39,6 +40,7 @@ app.use("/api/auth",authRoute)
 app.use("/auth",instagramAuth)
 app.use("/api/user",userRoute)
 app.use("/api/post",postRoute)
+app.use("/api/notification",notificationRoute)
 
 app.use(errorHandler)
 
